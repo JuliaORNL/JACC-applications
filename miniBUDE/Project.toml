@@ -1,0 +1,9 @@
+[deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
+Atomix = "a9b6321e-bd34-4604-b9c9-b65b8de01458"
+JACC = "0979c8fe-16a4-4796-9b82-89a9f10403ea"
+Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+Preferences = "21216c6a-2e73-6563-6e65-726566657250"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"

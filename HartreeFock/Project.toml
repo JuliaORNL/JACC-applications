@@ -1,0 +1,9 @@
+[deps]
+JACC = "0979c8fe-16a4-4796-9b82-89a9f10403ea"
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[compat]
+JACC = "0.3.1"
+SpecialFunctions = "2.5.0"
+Statistics = "1.11.1"
