@@ -1,0 +1,30 @@
+# Lid-Driven Cavity Simulation Configuration
+# MAC (Marker-and-Cell) Method Parameters
+
+# Grid Configuration
+x_grid: 64
+y_grid: 64
+
+# Computational Domain
+length_x: 2.0
+length_y: 2.0
+
+# Simulation Parameters
+max_steps: 1000
+viscosity: 0.04
+density: 2.0
+
+# SOR (Successive Over-Relaxation) Parameters
+max_iterations: 200
+beta: 3.0
+max_error: 0.002
+
+# Boundary Conditions
+u_north: 1.0 # Top wall velocity (lid velocity)
+u_south: 0.0 # Bottom wall velocity (remains 0)
+v_east: 0.0 # Right wall velocity (remains 0)
+v_west: 0.0 # Left wall velocity (remains 0)
+
+# Time Integration
+initial_time: 0.0 # Remains 0
+time_step: 0.004
