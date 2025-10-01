@@ -1,13 +1,9 @@
 
-
-
 using Test
 
 import LidDrivenCavity
 
-
 @testset "LidDrivenCavity Input" begin
-
     settings = LidDrivenCavity._read_input_file("data/config.yaml")
     @test settings.x_grid == 64
     @test settings.y_grid == 64
@@ -25,6 +21,6 @@ import LidDrivenCavity
     @test settings.v_west == 0.0
     @test settings.initial_time == 0.0
     @test settings.time_step == 0.004
+    @test settings.plot_interval == 50
     @test settings.T == Float32
-
 end

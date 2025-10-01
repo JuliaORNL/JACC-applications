@@ -28,3 +28,5 @@ v_west: 0.0 # Left wall velocity (remains 0)
 # Time Integration
 initial_time: 0.0 # Remains 0
 time_step: 0.004
+
+plot_interval: 50
