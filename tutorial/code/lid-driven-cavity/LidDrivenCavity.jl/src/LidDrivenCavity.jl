@@ -4,6 +4,7 @@ export run
 
 import YAML
 import JACC
+JACC.@init_backend
 import Plots
 
 include("structs.jl")
@@ -79,6 +80,7 @@ function run(config_file::String)
     # start the simulation to advance u, v, p in time
     time = settings.initial_time
     fnames = String[]
+    plot_id = 0
 
     for time_step in 1:(settings.max_steps)
 
@@ -94,11 +96,14 @@ function run(config_file::String)
         JACC.parallel_for((x_grid + 1, y_grid + 1), _kernel_tmp_velocities!,
             ut, vt, u, v, Δx, Δy, Δt, viscosity, x_grid, y_grid)
 
+        println(Array(ut))
+        println(Array(vt))
+
         # compute pressure field p
         for it_p in 1:(settings.max_iterations) # solve for pressure
-            JACC.parallel_for((x_grid + 2, y_grid + 2),
-                _kernel_pressure!,
-                pt, c, p, ut, vt, Δx, Δy, Δt,
+            JACC.parallel_for((x_grid + 2, y_grid + 2), _copy_kernel!, pt, p) # default to old value
+            JACC.parallel_for((x_grid + 2, y_grid + 2), _kernel_pressure!,
+                p, c, ut, vt, Δx, Δy, Δt,
                 settings.density, settings.beta,
                 x_grid, y_grid)
 
@@ -125,18 +130,19 @@ function run(config_file::String)
                 vv[i, j] = 0.5 * (v[i, j] + v[i + 1, j])
             end
 
-            println("Saving time step: $time_step, time: $(time)")
+            println("Saving time step: $time_step, time: $(time), as plot_id: $(plot_id)")
 
             plt = Plots.quiver!(x, y; quiver = (Array(uu), Array(vv)))
-            push!(fnames, "$(lpad(time_step, 6, "0")).png")
+            push!(fnames, "$(lpad(plot_id, 6, "0")).png")
             Plots.savefig(
-                plt, "$(lpad(time_step, 6, "0")).png")
+                plt, "./tmp/$(lpad(plot_id, 6, "0")).png")
+            plot_id += 1
         end
     end
     println(fnames)
-    anim = Plots.Animation(".", fnames)
+    anim = Plots.Animation("./tmp/", fnames)
     Plots.buildanimation(
-        anim, "lid_driven_cavity.gif"; fps = 1, show_msg = false) #set a suitable fps
+        anim, "lid_driven_cavity.gif"; fps = 5, show_msg = false) #set a suitable fps
 end
 
 function _kernel_update_velocities!(
@@ -151,8 +157,7 @@ function _kernel_update_velocities!(
 end
 
 function _kernel_pressure!(i, j,
-        pt, c, p, ut, vt, Δx, Δy, Δt, rho, beta, x_grid, y_grid)
-    pt[i, j] = p[i, j] # default to old value
+        p, c, ut, vt, Δx, Δy, Δt, rho, beta, x_grid, y_grid)
     if i >= 2 && i <= x_grid + 1 && j >= 2 && j <= y_grid + 1
         p[i, j] = beta * c[i, j] *
                   ((p[i + 1, j] + p[i - 1, j]) / Δx^2 +
@@ -160,6 +165,10 @@ function _kernel_pressure!(i, j,
                    (rho / Δt) * ((ut[i, j] - ut[i - 1, j]) / Δx +
                     (vt[i, j] - vt[i, j - 1]) / Δy)) + (1 - beta) * p[i, j]
     end
+end
+
+function _copy_kernel!(i, j, pt, p)
+    pt[i, j] = p[i, j]
 end
 
 function _kernel_tmp_velocities!(

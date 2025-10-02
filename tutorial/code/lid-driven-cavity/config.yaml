@@ -2,20 +2,20 @@
 # MAC (Marker-and-Cell) Method Parameters
 
 # Grid Configuration
-x_grid: 64
-y_grid: 64
+x_grid: 16
+y_grid: 16
 
 # Computational Domain
 length_x: 1.0
 length_y: 1.0
 
 # Simulation Parameters
-max_steps: 100
-viscosity: 0.005
-density: 1.0
+max_steps: 2
+viscosity: 0.01
+density: 0.5
 
 # SOR (Successive Over-Relaxation) Parameters
-max_iterations: 30
+max_iterations: 20
 beta: 1.5
 max_error: 0.01
 
@@ -27,7 +27,7 @@ v_west: 0.0 # Left wall velocity
 
 # Time Integration
 initial_time: 0.0
-time_step: 0.01
+time_step: 0.001
 
 # Plotting Interval -1 if no plotting is desired
 plot_interval: 1
